@@ -88,5 +88,21 @@ describe('InsertOpsConverter', function () {
         assert.ok(act instanceof InsertDataQuill);
       });
     });
+    it('should handle img', () => {
+      const imgOp = {
+        image: {
+          alt: null,
+          url: 'https://i.imgur.com/XSoFJ8l.gif',
+        },
+      };
+      const act =
+        InsertOpsConverter.convertInsertVal(imgOp, {
+          // Ignore url sanitization
+          urlSanitizer: (url) => url,
+        }) || ({} as any);
+      assert.equal(act.type, 'image');
+      assert.notEqual(act.value, '[object Object]');
+      assert.equal(act.value, imgOp.image.url);
+    });
   });
 });
